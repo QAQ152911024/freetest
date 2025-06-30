@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>登录/注册</title>
+</head>
+<body>
+    <h2>登录</h2>
+    <form id="indexForm">
+        用户名: <input type="text" name="username" required><br>
+        密码: <input type="password" name="password" required><br>
+        <button type="submit">登录</button>
+    </form>
+    <h2>注册</h2>
+    <form id="registerForm">
+        用户名: <input type="text" name="username" required><br>
+        密码: <input type="password" name="password" required><br>
+        手机号: <input type="text" name="phone" required><br>
+        <button type="submit">注册</button>
+    </form>
+    <script>
+        document.getElementById('indexForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = new FormData(this);
+            const res = await fetch('/api/index', {
+                method: 'POST',
+                body: JSON.stringify({
+                    username: form.get('username'),
+                    password: form.get('password')
+                }),
+                headers: {'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            if (data.success) {
+                window.location.href = '首页.html';
+            } else {
+                alert(data.message);
+            }
+        };
+
+        document.getElementById('registerForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const form = new FormData(this);
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                body: JSON.stringify({
+                    username: form.get('username'),
+                    password: form.get('password'),
+                    phone: form.get('phone')
+                }),
+                headers: {'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            alert(data.message);
+        };
+    </script>
+</body>
+</html>
